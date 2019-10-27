@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC_ZSHRC=https://raw.githubusercontent.com/aryklein/dotfiles/master/.zshrca
+SRC_ZSHRC=https://raw.githubusercontent.com/aryklein/dotfiles/master/.zshrc
 
 if [[ -f ${HOME}/.zshrc ]]; then
     read -r -p "There is an existing ZSH config. Do you want to override it? [y/N]: " RESPONSE
