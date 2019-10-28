@@ -8,6 +8,9 @@ function setup {
         if [[ ! $RESPONSE =~ ^(y|Y|yes|Yes)$ ]]; then
             echo "No changes were made. Bye!"
             exit 0
+        else
+            mv ${HOME}/.zshrc ${HOME}/.zshrc.bak
+            echo "Info: .zshrc saved as .zshrc.bak"
         fi
     fi
         
@@ -43,26 +46,38 @@ function setup {
 }
 
 function update {
-    find $HOME/.zsh -maxdepth 2 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull origin master
+    if find $HOME/.zsh -maxdepth 2 -name .git -type d > /dev/null; then
+        find $HOME/.zsh -maxdepth 2 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull origin master
+    else
+        echo "Error: no plugins found. Aborting."
+        exit 1
+    fi
 }
 
 
+# Do not run as root
 if [[ $EUID -eq 0 ]]; then
    echo "This script must not be run as root"
    exit 1
 fi
 
+# Check if zsh is installed in the system
+if ! which zsh > /dev/null 2>&1; then
+    echo "Error: zsh shell is not installed."
+    exit 1
+fi
+
+# main function
 case $1 in
-    '-s') echo Setup zsh...
+    -s|--setup) echo Setup zsh...
         setup
         ;;
-    '-u') echo Update zsh plugins...
+    -u|--update) echo Update zsh plugins...
         update
         ;;
     *)  echo "Usage: $0 [-s|-u]"
-        echo "  -s: setup zsh config and install plugins"
-        echo "  -u: update all zsh plugins"
-       
+        echo "  -s, --setup: setup zsh config and install plugins"
+        echo "  -u, --update: update all zsh plugins"
         ;;
 esac
 
