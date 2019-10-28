@@ -4,7 +4,7 @@ function setup {
     SRC_ZSHRC=https://raw.githubusercontent.com/aryklein/dotfiles/master/.zshrc
     
     if [[ -f ${HOME}/.zshrc ]]; then
-        read -r -p "There is an existing ZSH config. Do you want to override it? [y/N]: " RESPONSE
+        read -r -p "There is an existing zsh config. Do you want to override it? [y/N]: " RESPONSE
         if [[ ! $RESPONSE =~ ^(y|Y|yes|Yes)$ ]]; then
             echo "No changes were made. Bye!"
             exit 0
@@ -31,7 +31,7 @@ function setup {
     # change the login shell by ZSH
     ZSH_PATH=$(which zsh)
     if [[ $SHELL != $ZSH_PATH ]]; then
-        read -r -p "Login shell is not ZSH. Do you want to set ZSH as default login shell? [Y/n]: " RESPONSE
+        read -r -p "Login shell is not zsh. Do you want to set zsh as default login shell? [Y/n]: " RESPONSE
         if [[ $RESPONSE =~ ^(y|Y|yes|)$ ]]; then
             chsh -s $(which zsh) $USER
         else
@@ -45,4 +45,24 @@ function setup {
 function update {
     find $HOME/.zsh -maxdepth 2 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull origin master
 }
+
+
+if [[ $EUID -eq 0 ]]; then
+   echo "This script must not be run as root"
+   exit 1
+fi
+
+case $1 in
+    '-s') echo Setup zsh...
+        setup
+        ;;
+    '-u') echo Update zsh plugins...
+        update
+        ;;
+    *)  echo "Usage: $0 [-s|-u]"
+        echo "  -s: setup zsh config and install plugins"
+        echo "  -u: update all zsh plugins"
+       
+        ;;
+esac
 
