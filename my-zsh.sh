@@ -21,15 +21,14 @@ function setup {
     elif [[ -x /usr/bin/curl ]]; then
         curl -o $HOME/.zshrc $SRC_ZSHRC  2> /dev/null
     else
-        echo "This script requeries wget or curl, but it's not installed. Aborting."
+        echo "Error: This script requeries 'wget' or 'curl' to work. Aborting."
         exit 1
     fi
     
     # install necesary plugins
     echo "Installing plugins..."
-    mkdir ~/.zsh 2>/dev/null
-    git clone --depth=1 https://github.com/woefe/git-prompt.zsh ~/.zsh/git-prompt.zsh 2>/dev/null
-    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions 2>/dev/null
+    mkdir -p ~/.zsh/plugins 2>/dev/null
+    git clone --depth=1 https://github.com/woefe/git-prompt.zsh ~/.zsh/plugins/git-prompt.zsh 2>/dev/null
     
     # change the login shell by ZSH
     ZSH_PATH=$(which zsh)
@@ -46,8 +45,8 @@ function setup {
 }
 
 function update {
-    if find $HOME/.zsh -maxdepth 2 -name .git -type d > /dev/null; then
-        find $HOME/.zsh -maxdepth 2 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull origin master
+    if find $HOME/.zsh/plugins -maxdepth 2 -name .git -type d > /dev/null; then
+        find $HOME/.zsh/plugins -maxdepth 2 -name .git -type d | rev | cut -c 6- | rev | xargs -I {} git -C {} pull origin master
     else
         echo "Error: no plugins found. Aborting."
         exit 1
