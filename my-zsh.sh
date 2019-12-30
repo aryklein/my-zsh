@@ -42,6 +42,7 @@ function setup {
     fi
     
     echo "Setup done."
+    echo "Info: Consider installing 'zsh-autosuggestions' and 'zsh-completions' packages for a better experience."
 }
 
 function update {
@@ -52,7 +53,6 @@ function update {
         exit 1
     fi
 }
-
 
 # Do not run as root
 if [[ $EUID -eq 0 ]]; then
