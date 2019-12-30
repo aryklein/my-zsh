@@ -14,10 +14,11 @@ through my Linux package manager:
 ## Usage
 
 ```bash
- ./my-zsh.sh [-s|-u]
+ ./my-zsh.sh [-s|-u|-r]
 ```
 
 Options:
 
 - `-s`: setup `zshrc` config file and install plugins.
 - `-u`: update all zsh plugins.
+- `-r`: remove zsh setup and all plugins installed thru this script.

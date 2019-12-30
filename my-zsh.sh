@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ZSH_PLUGINS_DIR=$HOME/.zsh/plugins
+
 function setup {    
     SRC_ZSHRC=https://raw.githubusercontent.com/aryklein/dotfiles/master/.zshrc
     
@@ -27,8 +29,8 @@ function setup {
     
     # install necesary plugins
     echo "Installing plugins..."
-    mkdir -p ~/.zsh/plugins 2>/dev/null
-    git clone --depth=1 https://github.com/woefe/git-prompt.zsh ~/.zsh/plugins/git-prompt.zsh 2>/dev/null
+    mkdir -p $ZSH_PLUGINS_DIR 2>/dev/null
+    git clone --depth=1 https://github.com/woefe/git-prompt.zsh $ZSH_PLUGINS_DIR/git-prompt.zsh 2>/dev/null
     
     # change the login shell by ZSH
     ZSH_PATH=$(which zsh)
@@ -54,6 +56,18 @@ function update {
     fi
 }
 
+function remove {
+    if [[ -f $HOME/.zshrc ]]; then
+        echo "Removing .zshrc file..."
+        rm -f $HOME/.zshrc
+    fi
+
+    if [[ -d $ZSH_PLUGINS_DIR ]]; then
+        echo "Removing plugins..."
+        rm -rf $ZSH_PLUGINS_DIR
+    fi
+}
+
 # Do not run as root
 if [[ $EUID -eq 0 ]]; then
    echo "This script must not be run as root"
@@ -74,9 +88,13 @@ case $1 in
     -u|--update) echo Update zsh plugins...
         update
         ;;
+    -r|--remove) echo Remove zsh setup and plugins...
+        remove
+        ;;
     *)  echo "Usage: $0 [-s|-u]"
-        echo "  -s, --setup: setup zsh config and install plugins"
-        echo "  -u, --update: update all zsh plugins"
+        echo "  -s, --setup: setup zsh config and install plugins."
+        echo "  -u, --update: update all zsh plugins."
+        echo "  -r, --remove: remove zsh setup and all plugins installed thru this script."
         ;;
 esac
 
