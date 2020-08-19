@@ -44,7 +44,7 @@ function setup {
     fi
     
     echo "Setup done."
-    echo "Info: Consider installing 'zsh-autosuggestions' and 'zsh-completions' packages for a better experience."
+    echo "Info: Consider installing 'zsh-autosuggestions', 'zsh-syntax-highlighting' and 'zsh-completions' packages for a better experience."
 }
 
 function update {
